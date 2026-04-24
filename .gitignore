@@ -1,7 +1,6 @@
 # Ignorar archivos de entorno
 .env
 node_modules/
-.env
 database/*.db
 .DS_Store
 *.log
