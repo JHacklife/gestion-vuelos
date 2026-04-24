@@ -3,7 +3,7 @@
 // ============================================
 
 // Cambia este valor a 'local' o 'produccion' según el entorno
-const ENVIRONMENT = 'local'; // 'local' o 'produccion'
+const ENVIRONMENT = 'produccion'; // 'local' o 'produccion'
 
 const API_URLS = {
   local: 'http://localhost:3000',
