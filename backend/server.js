@@ -102,11 +102,18 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error('❌ Error no manejado:', err);
+  // Log detallado en consola
+  console.error('❌ ERROR 500 en API:', req.method, req.originalUrl);
+  if (err && err.stack) {
+    console.error('STACKTRACE:', err.stack);
+  } else {
+    console.error('ERROR:', err);
+  }
   res.status(500).json({
     error: 'Error interno del servidor',
-    mensaje: err.message,
-    stack: err.stack
+    mensaje: err && err.message ? err.message : String(err),
+    stack: err && err.stack ? err.stack : null,
+    detalle: err
   });
 });
 
