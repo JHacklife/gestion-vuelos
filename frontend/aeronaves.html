@@ -429,7 +429,7 @@ function mostrarAlerta(mensaje, tipo = 'info') {
     if (pilotoActual.foto_url && pilotoActual.foto_url !== '') {
         let fotoUrl = pilotoActual.foto_url;
         if (!fotoUrl.startsWith('http')) {
-            fotoUrl = `http://localhost:3000${fotoUrl}`;
+            fotoUrl = `https://lsaf.gestion-vuelos.com${fotoUrl}`;
         }
         avatarImg.style.display = 'block';
         avatarTexto.style.display = 'none';
@@ -487,7 +487,7 @@ function mostrarAlerta(mensaje, tipo = 'info') {
         }
         async function cambiarRol(id, nuevoRol) {
     const token = localStorage.getItem('token');
-    const res = await fetch(`http://localhost:3000/api/admin/pilotos/${id}/rol`, {
+    const res = await fetch(`https://lsaf.gestion-vuelos.com/api/admin/pilotos/${id}/rol`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ rol: nuevoRol })
@@ -517,7 +517,7 @@ mostrarAlerta('Error al actualizar rol', 'error');
             container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i><br>Cargando aeronaves...</div>';
             
             try {
-                const response = await fetch('http://localhost:3000/api/aeronaves', {
+                const response = await fetch('https://lsaf.gestion-vuelos.com/api/aeronaves', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
@@ -575,7 +575,7 @@ mostrarAlerta('Error al actualizar rol', 'error');
                             <div class="aeronaves-grid">
                                 ${aeronaves.map(a => {
                                     const tieneImagen = a.imagen_url && a.imagen_url.trim() !== '';
-                                    const imagenUrl = tieneImagen ? `http://localhost:3000${a.imagen_url}` : null;
+                                    const imagenUrl = tieneImagen ? `https://lsaf.gestion-vuelos.com${a.imagen_url}` : null;
                                     const nivelIcono = getNivelIcono(a.nivel);
                                     const nivelColor = getNivelColor(a.nivel);
                                     
@@ -698,7 +698,7 @@ function iniciarVerificacionPeriodica() {
         }
         
         try {
-            const response = await fetch(`http://localhost:3000/api/pilotos/${pilotoData.id}`, {
+            const response = await fetch(`https://lsaf.gestion-vuelos.com/api/pilotos/${pilotoData.id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             
