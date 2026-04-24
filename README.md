@@ -1,3 +1,17 @@
+# Configuración de variables de entorno
+
+Este proyecto utiliza un archivo `.env` para almacenar credenciales y datos sensibles. Debes crear un archivo `.env` en la raíz del proyecto (si no existe) y definir las siguientes variables:
+
+```
+DISCORD_BOT_TOKEN=tu_token_aqui
+DISCORD_GUILD_ID=tu_guild_id_aqui
+WEBHOOK_LIBROS=tu_webhook_libros
+WEBHOOK_SOLICITUDES=tu_webhook_solicitudes
+WEBHOOK_REGISTROS=tu_webhook_registros
+WEBHOOK_ASCENSOS=tu_webhook_ascensos
+```
+
+**Nunca subas tus credenciales reales al repositorio.**
 
 ```
 air-force-gestion

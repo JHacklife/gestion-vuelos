@@ -1,9 +1,10 @@
 // Webhooks
+require('dotenv').config();
 const WEBHOOKS = {
-  LIBROS: 'https://discord.com/api/webhooks/1490488273070461009/aOBMnkVikBEHA4NX34paor0cWxp1yHv8_e87ajmvocMowNDMMp5rvzai_EK4KqR2b6gb',
-  SOLICITUDES: 'https://discord.com/api/webhooks/1490490096950972501/rvbHQz7eent_wL0eLwFX85YcahHV8n6OuhS1W8OJcDFcgjgZQecRDYL0TeWdEMwx7E9d',
-  REGISTROS: 'https://discord.com/api/webhooks/1490491884458475812/KWgsdmhGyuF7T_b-L8WHAdGU_ZQmcgWtl5_GX_gerOAy6zQ5qWdqPKjitCQKWZfYZIr6',
-  ASCENSOS: 'https://discord.com/api/webhooks/1494546419070009444/q1zYCL8Hl0tMhHEzFv6-E0p0GPx77nbgdMaK_yCCitWnhincQbSe9Yd1n7mw2a6cgUWA'
+  LIBROS: process.env.WEBHOOK_LIBROS,
+  SOLICITUDES: process.env.WEBHOOK_SOLICITUDES,
+  REGISTROS: process.env.WEBHOOK_REGISTROS,
+  ASCENSOS: process.env.WEBHOOK_ASCENSOS
 };
 
 // Imagen de la Air Force
