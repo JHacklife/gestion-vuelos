@@ -12,6 +12,9 @@ const dotenv = require('dotenv');
 const path = require('path');
 const fs = require('fs');
 
+// Configuración de entorno personalizada
+const { ENVIRONMENT, FRONTEND_ORIGINS } = require('./config/env');
+
 // Cargar variables de entorno
 dotenv.config();
 
@@ -35,7 +38,7 @@ const app = express();
 
 // Configurar CORS para desarrollo y producción
 app.use(cors({
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'https://lsaf.gestion-vuelos.com'],
+  origin: FRONTEND_ORIGINS[ENVIRONMENT],
   credentials: true
 }));
 app.use(express.json());
@@ -81,7 +84,7 @@ app.use('/api/admin', adminRoutes);
 // ============================================
 
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     mensaje: '🚁 API de la Fuerza Aérea funcionando correctamente',
     version: '1.0.0'
   });
@@ -92,7 +95,7 @@ app.get('/', (req, res) => {
 // ============================================
 
 app.use((req, res) => {
-  res.status(404).json({ 
+  res.status(404).json({
     error: 'Ruta no encontrada',
     mensaje: `La ruta ${req.method} ${req.url} no existe`
   });
@@ -100,9 +103,9 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error('❌ Error no manejado:', err);
-  res.status(500).json({ 
+  res.status(500).json({
     error: 'Error interno del servidor',
-    mensaje: err.message 
+    mensaje: err.message
   });
 });
 
