@@ -2,6 +2,9 @@
 process.env.TZ = 'UTC';
 console.log('🕐 Zona horaria configurada a:', new Date().toString());
 
+// Forzar variables de entorno para desarrollo
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'mi_clave_super_secreta_airforce_2024';
+process.env.PORT = process.env.PORT || 3000;
 
 const express = require('express');
 const cors = require('cors');
@@ -30,17 +33,20 @@ const app = express();
 // MIDDLEWARES
 // ============================================
 
-app.use(cors()); // Permitir peticiones desde el frontend
-app.use(express.json()); // Parsear JSON
-app.use(express.urlencoded({ extended: true })); // Parsear formularios
+// Configurar CORS para desarrollo y producción
+app.use(cors({
+  origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'https://lsaf.gestion-vuelos.com'],
+  credentials: true
+}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ============================================
 // SERVIR ARCHIVOS ESTÁTICOS (IMÁGENES)
 // ============================================
 
-// Crear carpeta uploads si no existe
 const uploadsDir = path.join(__dirname, 'uploads');
-const subDirs = ['pilotos', 'aeronaves', 'ranks'];
+const subDirs = ['pilotos', 'aeronaves', 'ranks', 'observaciones'];
 
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -53,23 +59,17 @@ subDirs.forEach(dir => {
   }
 });
 
-// Servir archivos estáticos desde la carpeta uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 console.log('📁 Sirviendo archivos estáticos desde:', path.join(__dirname, 'uploads'));
 
-// Servir archivos estáticos del frontend (opcional, para desarrollo)
+// Servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // ============================================
-// RUTAS PÚBLICAS
+// RUTAS
 // ============================================
 
 app.use('/api', authRoutes.router);
-
-// ============================================
-// RUTAS PROTEGIDAS (requieren token)
-// ============================================
-
 app.use('/api/aeronaves', aeronavesRoutes);
 app.use('/api/libros', librosRoutes);
 app.use('/api/solicitudes', solicitudesRoutes);
@@ -77,41 +77,18 @@ app.use('/api/pilotos', pilotosRoutes);
 app.use('/api/admin', adminRoutes);
 
 // ============================================
-// RUTAS DE PRUEBA
+// RUTA PRINCIPAL
 // ============================================
 
-// Ruta principal
 app.get('/', (req, res) => {
   res.json({ 
     mensaje: '🚁 API de la Fuerza Aérea funcionando correctamente',
-    version: '1.0.0',
-    endpoints_disponibles: {
-      auth: 'POST /api/login',
-      aeronaves: 'GET /api/aeronaves',
-      libros: 'GET /api/libros, POST /api/libros, DELETE /api/libros/:id',
-      solicitudes: 'GET /api/solicitudes, POST /api/solicitudes, PUT /api/solicitudes/:id',
-      pilotos: 'GET /api/pilotos, GET /api/pilotos/:id',
-      admin: 'GET/POST/PUT/DELETE /api/admin/*'
-    }
-  });
-});
-
-// Ruta de prueba para ver la base de datos (solo para desarrollo)
-app.get('/api/test-db', (req, res) => {
-  db.all("SELECT id, nombre_completo, grado_code, email, rol FROM pilotos LIMIT 5", [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    res.json({ 
-      mensaje: 'Conexión a DB exitosa', 
-      pilotos: rows.map(p => ({ ...p, password_hash: '[OCULTO]' }))
-    });
+    version: '1.0.0'
   });
 });
 
 // ============================================
-// MANEJO DE ERRORES 404
+// MANEJO DE ERRORES
 // ============================================
 
 app.use((req, res) => {
@@ -120,10 +97,6 @@ app.use((req, res) => {
     mensaje: `La ruta ${req.method} ${req.url} no existe`
   });
 });
-
-// ============================================
-// MANEJO DE ERRORES GENERAL
-// ============================================
 
 app.use((err, req, res, next) => {
   console.error('❌ Error no manejado:', err);
@@ -139,19 +112,17 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║     🚁 LSAF Air Force - Sistema de Gestión de Vuelos     ║
 ╠══════════════════════════════════════════════════════════╣
 ║  Servidor corriendo en: http://localhost:${PORT}          ║
 ║  API disponible en: http://localhost:${PORT}/api          ║
-║  Imágenes estáticas en: http://localhost:${PORT}/uploads  ║
 ╚══════════════════════════════════════════════════════════╝
   `);
 });
 
-// Manejo de cierre graceful
 process.on('SIGINT', () => {
   console.log('\n🛑 Cerrando servidor...');
   server.close(() => {
