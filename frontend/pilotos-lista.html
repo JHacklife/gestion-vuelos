@@ -503,6 +503,7 @@
                     let fotoUrl = pilotoActual.foto_url;
                     if (!fotoUrl.startsWith('http')) {
                         fotoUrl = `https://lsaf.gestion-vuelos.com${fotoUrl}`;
+                        fotoUrl = `${BASE_API_URL}${fotoUrl}`;
                     }
                     avatarImg.style.display = 'block';
                     avatarTexto.style.display = 'none';
@@ -555,6 +556,7 @@
             async function cambiarRol(id, nuevoRol) {
                 const token = localStorage.getItem('token');
                 const res = await fetch(`https://lsaf.gestion-vuelos.com/api/admin/pilotos/${id}/rol`, {
+                    const res = await fetch(`${BASE_API_URL}/api/admin/pilotos/${id}/rol`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                         body: JSON.stringify({ rol: nuevoRol })
@@ -579,6 +581,7 @@
                 try {
                     const token = localStorage.getItem('token');
                     const response = await fetch('https://lsaf.gestion-vuelos.com/api/admin/rangos-public', {
+                        const response = await fetch(`${BASE_API_URL}/api/admin/rangos-public`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
                         if(response.ok) {
@@ -608,6 +611,7 @@
 
                 try {
                     const response = await fetch('https://lsaf.gestion-vuelos.com/api/pilotos', {
+                        const response = await fetch(`${BASE_API_URL}/api/pilotos`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
 
@@ -641,6 +645,7 @@
 
                     const tieneFoto = piloto.foto_url && piloto.foto_url.trim() !== '';
                     const fotoUrl = tieneFoto ? `https://lsaf.gestion-vuelos.com${piloto.foto_url}` : null;
+                    const fotoUrl = tieneFoto ? `${BASE_API_URL}${piloto.foto_url}` : null;
 
                     let avatarHtml = '';
                     if (tieneFoto) {
@@ -683,6 +688,7 @@
 
                 try {
                     const response = await fetch(`https://lsaf.gestion-vuelos.com/api/pilotos/${pilotoId}/horas-vuelo`, {
+                        const response = await fetch(`${BASE_API_URL}/api/pilotos/${pilotoId}/horas-vuelo`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
 
@@ -739,6 +745,7 @@
 
                 try {
                     const response = await fetch(`https://lsaf.gestion-vuelos.com/api/admin/pilotos/${pilotoId}/certificaciones`, {
+                        const response = await fetch(`${BASE_API_URL}/api/admin/pilotos/${pilotoId}/certificaciones`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
 
@@ -772,6 +779,7 @@
                 try {
                     // Primero cargar los rangos con logos
                     const rangosResponse = await fetch('https://lsaf.gestion-vuelos.com/api/admin/rangos-public', {
+                        const rangosResponse = await fetch(`${BASE_API_URL}/api/admin/rangos-public`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
                         const rangosData = await rangosResponse.json();
@@ -779,6 +787,7 @@
 
                         // Luego cargar el historial
                         const response = await fetch(`https://lsaf.gestion-vuelos.com/api/pilotos/${pilotoId}/historial-ascensos`, {
+                            const response = await fetch(`${BASE_API_URL}/api/pilotos/${pilotoId}/historial-ascensos`, {
                                 headers: { 'Authorization': `Bearer ${token}` }
                             });
 
@@ -795,6 +804,7 @@
                     const rango = rangosConLogo.find(r => r.code === gradoCode);
                     if (rango && rango.logo_url) {
                         return `<img src="https://lsaf.gestion-vuelos.com${rango.logo_url}" style="width: 24px; height: 24px; object-fit: cover; border-radius: 50%; margin-left: 8px; vertical-align: middle;">`;
+                        return `<img src="${BASE_API_URL}${rango.logo_url}" style="width: 24px; height: 24px; object-fit: cover; border-radius: 50%; margin-left: 8px; vertical-align: middle;">`;
                     }
                     return '';
                 }
@@ -838,6 +848,7 @@
 
                 if (piloto.foto_url && piloto.foto_url !== '') {
                     const fotoUrl = `https://lsaf.gestion-vuelos.com${piloto.foto_url}`;
+                    const fotoUrl = `${BASE_API_URL}${piloto.foto_url}`;
                     modalAvatar.style.display = 'block';
                     modalAvatarIniciales.style.display = 'none';
                     modalAvatar.src = fotoUrl;
@@ -966,6 +977,7 @@
 
                     try {
                         const response = await fetch(`https://lsaf.gestion-vuelos.com/api/pilotos/${pilotoData.id}`, {
+                            const response = await fetch(`${BASE_API_URL}/api/pilotos/${pilotoData.id}`, {
                                 headers: { 'Authorization': `Bearer ${token}` }
                             });
 
