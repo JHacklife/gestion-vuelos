@@ -10,7 +10,9 @@ const FRONTEND_ORIGINS = {
     'http://127.0.0.1:5500'
   ],
   produccion: [
-    'https://lsaf.gestion-vuelos.com'
+    'https://lsaf.gestion-vuelos.com',
+    'https://gestion-vuelos.com',
+    'https://www.gestion-vuelos.com'
   ]
 };
 
